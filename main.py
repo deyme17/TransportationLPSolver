@@ -1,7 +1,7 @@
 import sys
 from PyQt6.QtWidgets import QApplication
 
-from .core import TLPSolver, VogelsMethod, PotentialMethod
+from core import TLPSolver, VogelsMethod, PotentialMethod
 
 from view.app_window import TLPSolverApp
 from view import InputSection, ResultSection
