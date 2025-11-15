@@ -70,4 +70,5 @@ class TLPSolver:
             return TLPProblem(
                 supply=new_supply,
                 demand=problem.demand.copy(),
+                costs=new_costs
             )
