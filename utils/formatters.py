@@ -16,7 +16,9 @@ class ResultFormatter:
         """
         try:
             status_enum = SolutionStatus(status.lower())
-            return StatusFormatter.format_status(status_enum)
+            status_str = StatusFormatter.STATUS_LABELS.get(status_enum, status.capitalize())
+            status_color = StatusColor.get_color(status_enum)
+            return status_str, status_color
         except (ValueError, AttributeError):
             return status.capitalize(), StatusColor.UNKNOWN.value
     
