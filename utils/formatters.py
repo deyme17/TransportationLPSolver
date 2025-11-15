@@ -6,11 +6,11 @@ class ResultFormatter:
     """Formats Transportation LP optimization results for display"""
     
     @staticmethod
-    def format_status(status: SolutionStatus) -> Tuple[str, str]:
+    def format_status(status: str) -> Tuple[str, str]:
         """
         Format status text and return corresponding color.
         Args:
-            status: SolutionStatus
+            status: Status string from solver (will be converted to SolutionStatus)
         Returns:
             Tuple of (formatted_status, color_hex)
         """
