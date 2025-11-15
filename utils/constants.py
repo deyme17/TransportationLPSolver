@@ -1,5 +1,37 @@
 from enum import Enum
 
+class SolutionStatus(Enum):
+    OPTIMAL = 'optimal'
+    INFEASIBLE = 'infeasible'
+    UNBOUNDED = 'unbounded'
+    ERROR = 'error'
+    UNKNOWN = 'unknown'
+    PENDING = 'pending'
+
+class StatusColor(Enum):
+    OPTIMAL = '#4CAF50'
+    INFEASIBLE = '#f44336'
+    UNBOUNDED = '#FF9800'
+    ERROR = '#f44336'
+    UNKNOWN = '#aaaaaa'
+    PENDING = '#aaaaaa'
+    
+    @staticmethod
+    def get_color(status: SolutionStatus) -> str:
+        """Get color for given status"""
+        return StatusColor[status.name].value
+
+class StatusFormatter:
+    """Status formatting utilities"""
+    STATUS_LABELS = {
+        SolutionStatus.OPTIMAL: "Optimal Solution Found",
+        SolutionStatus.INFEASIBLE: "Problem is Infeasible",
+        SolutionStatus.UNBOUNDED: "Problem is Unbounded",
+        SolutionStatus.ERROR: "Solver Error",
+        SolutionStatus.UNKNOWN: "Unknown Status",
+        SolutionStatus.PENDING: "Solving...",
+    }
+
 # app
 class AppConstants:
     WINDOW_TITLE = "Transportation Linear Programming Solver"
@@ -25,3 +57,8 @@ class InputWidgetConstants:
     VALUE_INPUT_WIDTH = 80
     COST_INPUT_WIDTH = 70
     MATRIX_HEADER_WIDTH = 50
+
+# result widget
+class ResultWidgetConstants:
+    MIN_MATRIX_HEIGHT = 300
+    SUMMARY_HEIGHT = 200

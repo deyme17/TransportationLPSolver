@@ -1,4 +1,5 @@
-from typing import List, Optional, Any, Dict
+from typing import List, Optional
+from utils.constants import SolutionStatus
 from dataclasses import dataclass
 
 
@@ -37,7 +38,7 @@ class TLPProblem:
 @dataclass
 class TLPResult:
     """Container for Transportation LP problem results"""
-    status: str
+    status: SolutionStatus
     optimal_value: Optional[float] = None
     solution: Optional[List[List[float]]] = None  # allocation matrix X[i][j]
     error_message: Optional[str] = None
@@ -45,7 +46,7 @@ class TLPResult:
     @property
     def is_optimal(self) -> bool:
         """Check if optimal solution was found"""
-        return self.status == "optimal"
+        return SolutionStatus.OPTIMAL
 
 
 @dataclass
