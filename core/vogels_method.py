@@ -4,6 +4,7 @@ import numpy as np
 
 class VogelsMethod(IBFSFinder):
     """Vogel's Approximation Method (VAM)"""
+    EPSILON=1e-10
     def find_initial_bfs(self, problem: TLPProblem):
         """
         Computes an initial basic feasible solution for transportation problems
@@ -54,9 +55,9 @@ class VogelsMethod(IBFSFinder):
             demand[j] -= amount
             
             # remove exhausted row or column
-            if supply[i] < 1e-10:
+            if supply[i] < self.EPSILON:
                 active_rows.discard(i)
-            if demand[j] < 1e-10:
+            if demand[j] < self.EPSILON:
                 active_cols.discard(j)
         
         total_cost = sum(

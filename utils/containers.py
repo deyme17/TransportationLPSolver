@@ -46,7 +46,7 @@ class TLPResult:
     @property
     def is_optimal(self) -> bool:
         """Check if optimal solution was found"""
-        return SolutionStatus.OPTIMAL
+        return SolutionStatus.OPTIMAL.value
 
 
 @dataclass
