@@ -26,7 +26,6 @@ class ResultFormatter:
         Format optimal value for display.
         Args:
             value: Optimal objective value
-            
         Returns:
             Formatted string
         """
@@ -38,7 +37,6 @@ class ResultFormatter:
         Format allocation value for display.
         Args:
             value: Allocation amount
-            
         Returns:
             Formatted string
         """
@@ -52,7 +50,6 @@ class ResultFormatter:
         Format complete solution summary.
         Args:
             result: TLPResult object
-            
         Returns:
             Formatted summary string
         """
