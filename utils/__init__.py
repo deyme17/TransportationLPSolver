@@ -1,4 +1,4 @@
-from .constants import AppConstants
+from .constants import AppConstants, InputWidgetConstants
 from .containers import TLPProblem, TLPResult, BFSolution
 from .formatters import ResultFormatter
 from .stylesheet import StyleSheet
