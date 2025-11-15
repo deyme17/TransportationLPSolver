@@ -66,7 +66,6 @@ class PotentialMethod(ITransportationAlgorithm):
                 status=SolutionStatus.ERROR.value,
                 error_message=f"Max iterations ({self.max_iterations}) reached"
             )
-            
         except Exception as e:
             return TLPResult(
                 status=SolutionStatus.ERROR.value,
@@ -125,9 +124,16 @@ class PotentialMethod(ITransportationAlgorithm):
         def dfs(curr: Tuple[int, int], target: Tuple[int, int], path: List[Tuple[int, int]], 
             visited: Set[Tuple[int, int]], is_row: bool) -> Optional[List[Tuple[int, int]]]:
             """DFS to find cycle"""
-            if curr == target and len(path) >= 4:
-                return path
-            if curr in visited and curr != target:
+            if len(path) >= 4:
+                i, j = curr
+                if is_row:
+                    if i == target[0] and target[1] in rows_cells.get(i, []):
+                        return path
+                else:
+                    if j == target[1] and target[0] in cols_cells.get(j, []):
+                        return path
+            
+            if curr in visited:
                 return None
             if len(path) > 2 * (m + n):
                 return None
@@ -169,7 +175,11 @@ class PotentialMethod(ITransportationAlgorithm):
         rows_cells[i0].append(j0)
         cols_cells[j0].append(i0)
 
-        return dfs(entering_cell, entering_cell, [entering_cell], set(), True)
+        cycle = dfs(entering_cell, entering_cell, [entering_cell], set(), True)
+        if cycle: # close a cycle
+            cycle.append(entering_cell)
+        
+        return cycle
 
     def _update_solution(self, allocation: np.ndarray, basis: Set[Tuple[int, int]], 
                          cycle: List[Tuple[int, int]]) -> Tuple[np.ndarray, Set[Tuple[int, int]]]:
@@ -183,12 +193,18 @@ class PotentialMethod(ITransportationAlgorithm):
         Returns:
             Updated (allocation, basis)
         """
-        # add indicies - '-'
+        if len(cycle) > 1 and cycle[0] == cycle[-1]:
+            cycle = cycle[:-1]
+        
+        # add indicies of '-'
         minus_positions = cycle[1::2]
 
         # min allocation at '-' cells
         theta = min(allocation[i, j] for i, j in minus_positions)
-        if theta < self.EPSILON: theta = self.EPSILON
+        if theta < self.EPSILON:
+            positive_values = [allocation[i, j] for i, j in minus_positions 
+                             if allocation[i, j] > self.EPSILON]
+            theta = min(positive_values) if positive_values else self.EPSILON
 
         for idx, (i, j) in enumerate(cycle):
             if idx % 2 == 0:    # '+' cells
@@ -206,7 +222,8 @@ class PotentialMethod(ITransportationAlgorithm):
 
         # update basis
         new_basis = basis.copy()
-        new_basis.remove(leaving_cell)
+        if leaving_cell:
+            new_basis.remove(leaving_cell)
         new_basis.add(cycle[0])  # entering cell
 
         return allocation, new_basis
